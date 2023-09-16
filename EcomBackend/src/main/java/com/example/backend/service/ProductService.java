@@ -11,7 +11,7 @@ public interface ProductService {
 
 	public List<Product> viewAllProduct();
 
-	public Optional<Product> getById(Long id);
+	public Product getById(Long id);
 
 	public void deleteProducbyId(long id);
 	

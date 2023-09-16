@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.backend.dtos.ProductDto;
+import com.example.backend.exception.ResourceNotFoundException;
 import com.example.backend.pojos.Product;
 import com.example.backend.repository.ProductRepository;
 
@@ -35,16 +36,22 @@ public class ProductServiceImpl implements ProductService {
 
 
 	@Override
-	public Optional<Product> getById(Long id) {
+	public Product getById(Long id) {
 		// TODO Auto-generated method stub
-		   Optional<Product> product=productRepository.findById(id);
+		   Product product=productRepository.findById(id)
+				   .orElseThrow(()-> new ResourceNotFoundException(id +" id not found"));
+		 
 		 return product;
 	}
 
 
 	@Override
 	public void deleteProducbyId(long id) {
-		productRepository.deleteById(id);
+		 Product product=productRepository.findById(id)
+				   .orElseThrow(()-> new ResourceNotFoundException(id +" id not exists"));
+		 
+
+		productRepository.delete(product);
 		
 	}
 

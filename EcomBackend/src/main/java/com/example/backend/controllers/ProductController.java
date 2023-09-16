@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,37 +30,40 @@ public class ProductController {
 	
 	@PostMapping("/create")
 	
-	public Product createProduct(@RequestBody Product p) {
+	public ResponseEntity<Product> createProduct(@RequestBody Product p) {
 		
 		System.out.println(p);
-		return productService.createProduct(p);
-		
+		Product product= productService.createProduct(p);
+		return new ResponseEntity<Product>(product,HttpStatus.CREATED);
 		
 	}
 	
 	
 	@GetMapping("/view")
 
-	public List<Product> ViewAllProduct(){
+	public ResponseEntity<List<Product>> ViewAllProduct(){
 		List<Product> list= productService.viewAllProduct();
-		return list;
+		return new  ResponseEntity<List<Product>>(list,HttpStatus.OK);
 	}
 	
 	
 	@GetMapping("view/{id}")
-	//@ResponseBody
-	public Optional<Product> getById(@PathVariable Long id ) {
+   @ResponseBody
+	public ResponseEntity<Product> getById(@PathVariable Long id ) {
 		
-		return productService.getById(id);
+		Product product=productService.getById(id);
+		return new ResponseEntity<Product>(product,HttpStatus.ACCEPTED);
 	}
 	
 	
 	//delete product by id
 	@DeleteMapping("del/{id}")
-	public void deleteProduct( @PathVariable long id ) 
+	public ResponseEntity<String> deleteProduct( @PathVariable long id ) 
 	{
 		
 		productService.deleteProducbyId(id);
+		
+		return new ResponseEntity<String>("Product deleted",HttpStatus.OK);
 	}
 	
 	
